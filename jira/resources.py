@@ -188,6 +188,12 @@ class Resource(object):
             data.update(fields)
         data.update(kwargs)
 
+        if data['started'] is not None:
+            import pytz
+            pst = pytz.timezone('Europe/Madrid')
+            z = str(int(pst.utcoffset(data['started']).total_seconds() / 60 / 60)).zfill(2) + '00'
+            data['started'] = data['started'].strftime("%Y-%m-%dT%H:%M:%S.000+" + z)
+
         data = json.dumps(data)
 
         if not notify:

@@ -1346,6 +1346,12 @@ class JIRA(object):
                               'active': False
                               }
             data['updateAuthor'] = data['author']
+
+        import pytz
+        pst = pytz.timezone('Europe/Madrid')
+        z = str(int(pst.utcoffset(started).total_seconds() / 60 / 60)).zfill(2) + '00'
+        data['started'] = started.strftime("%Y-%m-%dT%H:%M:%S.000+" + z)
+
         # TODO: report bug to Atlassian: author and updateAuthor parameters are
         # ignored.
         url = self._get_url('issue/{0}/worklog'.format(issue))
